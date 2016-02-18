@@ -1,15 +1,15 @@
 {
-  "name": "socket-io-middleware",
+  "name": "socket-io-router",
   "version": "0.0.1",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
-    "test": "NODE_ENV=testing ./node_modules/.bin/mocha --harmony --reporter spec ./tests/**/test-*.js",
-    "coverage": "NODE_ENV=testing node ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha \"./tests/**/test-*.js\""
+    "test": "NODE_ENV=testing ./node_modules/.bin/mocha --harmony --reporter spec ./tests/**/*test-*.js",
+    "coverage": "NODE_ENV=testing node ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha \"./tests/**/*test-*.js\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hgenru/socket-io-middleware.git"
+    "url": "git+https://github.com/hgenru/socket-io-router.git"
   },
   "keywords": [
     "socket.io",
@@ -18,12 +18,25 @@
   "author": "hgenru",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hgenru/socket-io-middleware/issues"
+    "url": "https://github.com/hgenru/socket-io-router/issues"
   },
-  "homepage": "https://github.com/hgenru/socket-io-middleware#readme",
+  "homepage": "https://github.com/hgenru/socket-io-router#readme",
   "devDependencies": {
+    "socket-io-mock": "https://github.com/hgenru/socket-io-mock.git",
     "chai": "^3.5.0",
+    "chai-like": "^0.1.9",
+    "freeport": "^1.0.5",
     "istanbul": "^0.4.2",
-    "mocha": "^2.4.5"
+    "mocha": "^2.4.5",
+    "native-promisify": "^1.2.0",
+    "socket.io": "^1.4.5"
+  },
+  "peer-dependencies": {
+    "co": "^4.6.0",
+    "eventemitter2": "^0.4.14",
+    "socketio-wildcard": "^0.3.0"
+  },
+  "dependencies": {
+      "koa-compose": "^3.0.0"
   }
 }
