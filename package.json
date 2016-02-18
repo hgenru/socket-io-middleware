@@ -1,0 +1,29 @@
+{
+  "name": "socket-io-middleware",
+  "version": "0.0.1",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "NODE_ENV=testing ./node_modules/.bin/mocha --harmony --reporter spec ./tests/**/test-*.js",
+    "coverage": "NODE_ENV=testing node ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha \"./tests/**/test-*.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hgenru/socket-io-middleware.git"
+  },
+  "keywords": [
+    "socket.io",
+    "koa"
+  ],
+  "author": "hgenru",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hgenru/socket-io-middleware/issues"
+  },
+  "homepage": "https://github.com/hgenru/socket-io-middleware#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "istanbul": "^0.4.2",
+    "mocha": "^2.4.5"
+  }
+}
