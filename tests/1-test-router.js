@@ -45,4 +45,83 @@ describe('router', function() {
         client.emit('&test');
         yield done;
     }));
+
+    it('should send success data', co.wrap(function*() {
+        router = new Router(server);
+        router.route('test', (ctx) => ctx.success(1));
+        let client = utils.createClient(server);
+        yield client._connect;
+        client.on('1:test:success', (data) => {
+            data.should.be.equal(1);
+            done.resolve();
+        });
+        client.emit('1:test');
+        yield done;
+    }));
+
+    it('should send error data', co.wrap(function*() {
+        router = new Router(server);
+        router.route('test', (ctx) => ctx.error(1));
+        let client = utils.createClient(server);
+        yield client._connect;
+        client.on('2:test:error', (data) => {
+            data.should.be.equal(1);
+            done.resolve();
+        });
+        client.emit('2:test');
+        yield done;
+    }));
+
+    it('should send error on throw', co.wrap(function*() {
+        router = new Router(server);
+        router.onerror = () => {};  // suppress log
+        router.route('test', () => {
+            throw new Error('wtf');
+        });
+        let client = utils.createClient(server);
+        yield client._connect;
+        client.on('2:test:error', (data) => {
+            data.should.have.property('code', 503);
+            done.resolve();
+        });
+        client.emit('2:test');
+        yield done;
+    }));
+
+    it('should send error on throw with code', co.wrap(function*() {
+        router = new Router(server);
+        router.onerror = () => {};  // suppress log
+        router.route('test', () => {
+            throw {code: 403};
+        });
+        let client = utils.createClient(server);
+        yield client._connect;
+        client.on('2:test:error', (data) => {
+            data.should.have.property('code', 403);
+            done.resolve();
+        });
+        client.emit('2:test');
+        yield done;
+    }));
+
+    it('test options = {sendEndEvent: true} on success', co.wrap(function*() {
+        router = new Router(server, {sendEndEvent: true});
+        router.route('test', () => {});
+        let client = utils.createClient(server);
+        yield client._connect;
+        client.on('2:test:end', done.resolve);
+        client.emit('2:test');
+        yield done;
+    }));
+
+    it('test options = {sendEndEvent: true} on error', co.wrap(function*() {
+        router = new Router(server, {sendEndEvent: true});
+        router.onerror = () => {};  // suppress log
+        router.route('test', () => {throw new Error('fuck')});
+        let client = utils.createClient(server);
+        yield client._connect;
+        client.on('2:test:end', done.resolve);
+        client.emit('2:test');
+        yield done;
+    }));
 });
