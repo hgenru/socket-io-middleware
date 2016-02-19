@@ -114,13 +114,28 @@ describe('router', function() {
         yield done;
     }));
 
-    it('test options = {sendEndEvent: true} on error', co.wrap(function*() {
+    it('test global middleware', co.wrap(function*() {
         router = new Router(server, {sendEndEvent: true});
         router.onerror = () => {};  // suppress log
-        router.route('test', () => {throw new Error('fuck')});
+        router.use((ctx, next) => {
+            ctx.wtf = 1;
+            next().then(() => {
+                ctx.wtf.should.be.equal(2);
+                done.resolve();
+            });
+        });
+        router.route('test', [
+            (ctx, next) => {
+                --ctx.wtf;
+                return next();
+            },
+            (ctx, next) => {
+                ctx.wtf = ctx.wtf + 2;
+                return next();
+            },
+        ]);
         let client = utils.createClient(server);
         yield client._connect;
-        client.on('2:test:end', done.resolve);
         client.emit('2:test');
         yield done;
     }));
