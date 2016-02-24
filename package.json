@@ -33,10 +33,10 @@
   },
   "peer-dependencies": {
     "co": "^4.6.0",
-    "eventemitter2": "^0.4.14",
     "socketio-wildcard": "^0.3.0"
   },
   "dependencies": {
+      "eventemitter2": "^1.0.0",
       "koa-compose": "^3.0.0"
   }
 }

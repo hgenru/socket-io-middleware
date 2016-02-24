@@ -105,4 +105,16 @@ describe('context', function() {
         });
         context.to('test-room').emit(null, {a: 'ccc'});
     });
+
+    it('test on("preresult") and on("result")', function(done) {
+        let context = new Context(router, socket, event);
+        context.on('before-result', (ctx) => {
+            ctx.result.data = 'notfuck';
+        });
+        context.on('result', (ctx) => {
+            ctx.result.data.should.be.equal('notfuck');
+            done();
+        });
+        context.success('fuck');
+    });
 });

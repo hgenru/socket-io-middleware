@@ -115,7 +115,7 @@ describe('router', function() {
     }));
 
     it('test global middleware', co.wrap(function*() {
-        router = new Router(server, {sendEndEvent: true});
+        router = new Router(server);
         router.onerror = () => {};  // suppress log
         router.use((ctx, next) => {
             ctx.wtf = 1;
