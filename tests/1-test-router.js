@@ -92,12 +92,13 @@ describe('router', function() {
         router = new Router(server);
         router.onerror = () => {};  // suppress log
         router.route('test', () => {
-            throw {code: 403};
+            throw {code: 403, some: 'bar'};
         });
         let client = utils.createClient(server);
         yield client._connect;
         client.on('2:test:error', (data) => {
             data.should.have.property('code', 403);
+            data.should.have.property('some', 'bar');
             done.resolve();
         });
         client.emit('2:test');
