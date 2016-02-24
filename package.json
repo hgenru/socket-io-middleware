@@ -32,10 +32,10 @@
     "socket.io": "^1.4.5"
   },
   "peer-dependencies": {
-    "co": "^4.6.0",
-    "socketio-wildcard": "^0.3.0"
   },
   "dependencies": {
+      "co": "^4.6.0",
+      "socketio-wildcard": "^0.3.0",
       "eventemitter2": "^1.0.0",
       "koa-compose": "^3.0.0"
   }
