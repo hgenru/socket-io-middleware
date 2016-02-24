@@ -35,20 +35,22 @@ describe('context', function() {
         context.should.have.property('data', data);
     });
 
-    it('check success', function() {
+    it('check success', function(done) {
         let data = {test: 'example'};
         let context = new Context(router, socket, event, data);
-        socket.on(':test:success', (data) => {
+        socket.socketClient.on(':test:success', (data) => {
             data.should.be.equal('data');
+            done();
         });
         context.success('data');
     });
 
-    it('check error', function() {
+    it('check error', function(done) {
         let data = {test: 'example'};
         let context = new Context(router, socket, event, data);
-        socket.on(':test:error', (data) => {
+        socket.socketClient.on(':test:error', (data) => {
             data.should.be.equal('data');
+            done();
         });
         context.error('data');
     });
@@ -106,13 +108,26 @@ describe('context', function() {
         context.to('test-room').emit(null, {a: 'ccc'});
     });
 
-    it('test on("preresult") and on("result")', function(done) {
+    it('test on("before-result") and on("result")', function(done) {
         let context = new Context(router, socket, event);
         context.on('before-result', (ctx) => {
             ctx.result.data = 'notfuck';
         });
         context.on('result', (ctx) => {
             ctx.result.data.should.be.equal('notfuck');
+            done();
+        });
+        context.success('fuck');
+    });
+
+    it('on("before-result") should may prevent success()', function(done) {
+        let context = new Context(router, socket, event);
+        context.on('before-result', () => {
+            return Promise.reject({wtf: 'fuck you'});
+        });
+        context.on('result', (ctx) => {
+            ctx.result.status.should.be.equal('error');
+            ctx.result.data.code.should.be.equal(503);
             done();
         });
         context.success('fuck');
