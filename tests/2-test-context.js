@@ -111,10 +111,10 @@ describe('context', function() {
     it('test on("before-result") and on("result")', function(done) {
         let context = new Context(router, socket, event);
         context.emitter.on('before-result', (ctx) => {
-            ctx.result.data = 'notfuck';
+            ctx.result = 'notfuck';
         });
         context.emitter.on('result', (ctx) => {
-            ctx.result.data.should.be.equal('notfuck');
+            ctx.result.should.be.equal('notfuck');
             done();
         });
         context.success('fuck');
@@ -126,8 +126,8 @@ describe('context', function() {
             return Promise.reject({wtf: 'fuck you'});
         });
         context.emitter.on('result', (ctx) => {
-            ctx.result.status.should.be.equal('error');
-            ctx.result.data.code.should.be.equal(503);
+            ctx.status.should.be.equal('error');
+            ctx.result.code.should.be.equal(503);
             done();
         });
         context.success('fuck');
