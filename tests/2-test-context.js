@@ -27,7 +27,7 @@ describe('context', function() {
     it('check properties', function() {
         let data = {test: 'example'};
         let event = new Event('test', ':test');
-        let context = new Context(router, socket, event, data);
+        let context = new Context(router.options, socket, event, data);
 
         context.should.have.property('socket', socket);
         context.should.have.property('s', socket);
@@ -37,7 +37,7 @@ describe('context', function() {
 
     it('check success', function(done) {
         let data = {test: 'example'};
-        let context = new Context(router, socket, event, data);
+        let context = new Context(router.options, socket, event, data);
         socket.socketClient.on(':test:success', (data) => {
             data.should.be.equal('data');
             done();
@@ -47,7 +47,7 @@ describe('context', function() {
 
     it('check error', function(done) {
         let data = {test: 'example'};
-        let context = new Context(router, socket, event, data);
+        let context = new Context(router.options, socket, event, data);
         socket.socketClient.on(':test:error', (data) => {
             data.should.be.equal('data');
             done();
@@ -56,31 +56,31 @@ describe('context', function() {
     });
 
     it('success should call once', () => {
-        let context = new Context(router, socket, event);
+        let context = new Context(router.options, socket, event);
         context.success('data');
         chai.expect(() => context.success('err')).to.throw(/call once/);
     });
 
     it('result callback should call once', () => {
-        let context = new Context(router, socket, event);
+        let context = new Context(router.options, socket, event);
         context.success('data');
         chai.expect(() => context.error('err')).to.throw(/call once/);
     });
 
     it('ctx.emit should append postfix in emit()', (done) => {
-        let context = new Context(router, socket, event);
+        let context = new Context(router.options, socket, event);
         socket.socketClient.on(':test:fuck', done);
         context.emit('fuck');
     });
 
     it('ctx.broadcast(arg) should append postfix', (done) => {
-        let context = new Context(router, socket, event);
+        let context = new Context(router.options, socket, event);
         socket.onEmit('test:fuck', () => done());
         context.broadcast('fuck');
     });
 
     it('ctx.broadcast(arg) should not append postfix if arg is null', (done) => {
-        let context = new Context(router, socket, event);
+        let context = new Context(router.options, socket, event);
         socket.onEmit('test', (data) => {
             data.should.be.equal('fuuu');
             done();
@@ -89,7 +89,7 @@ describe('context', function() {
     });
 
     it('to(roomName) should broadcast message to room', (done) => {
-        let context = new Context(router, socket, event);
+        let context = new Context(router.options, socket, event);
         socket.onEmit('test:ttt', (data) => {
             socket.broadcastLog[0].room.should.be.equal('test-room');
             data.a.should.be.equal('ggg');
@@ -99,7 +99,7 @@ describe('context', function() {
     });
 
     it('to(roomName).emit(path, data) path may be null', (done) => {
-        let context = new Context(router, socket, event);
+        let context = new Context(router.options, socket, event);
         socket.onEmit('test', (data) => {
             socket.broadcastLog[0].room.should.be.equal('test-room');
             data.a.should.be.equal('ccc');
@@ -109,7 +109,7 @@ describe('context', function() {
     });
 
     it('test on("before-result") and on("result")', function(done) {
-        let context = new Context(router, socket, event);
+        let context = new Context(router.options, socket, event);
         context.emitter.on('before-result', (ctx) => {
             ctx.result = 'notfuck';
         });
@@ -121,7 +121,7 @@ describe('context', function() {
     });
 
     it('on("before-result") should may prevent success()', function(done) {
-        let context = new Context(router, socket, event);
+        let context = new Context(router.options, socket, event);
         context.emitter.on('before-result', () => {
             return Promise.reject({wtf: 'fuck you'});
         });
