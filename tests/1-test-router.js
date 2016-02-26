@@ -140,4 +140,12 @@ describe('router', function() {
         client.emit('2:test');
         yield done;
     }));
+
+    it('check defaultOptions', function() {
+        let defaults = Router.defaultOptions;
+        defaults.successPostfix.should.be.equal('success');
+        defaults.errorPostfix.should.be.equal('error');
+        defaults.endPostfix.should.be.equal('end');
+        defaults.sendEndEvent.should.be.equal(false);
+    });
 });
