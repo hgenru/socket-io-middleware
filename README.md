@@ -5,6 +5,7 @@ koa-like socket io router
     npm i --save https://github.com/hgenru/socket-io-router.git
 
 ## Usage
+full doc here http://hgenru.github.io/socket-io-router/0.0.1/
 
     const co = require('co');
     const IO = require('socket.io');
